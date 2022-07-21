@@ -1,46 +1,46 @@
-const {v4} = require('uuid');
+const { v4 } = require('uuid');
 
 let contacts = [
     {
         id: v4(),
         name: 'Mateus',
         email: 'mateus@gmail.com',
-        phone:'123123123',
+        phone: '123123123',
         category_id: v4(),
-    },{
+    }, {
         id: v4(),
         name: 'Jose',
         email: 'jose@gmail.com',
-        phone:'123123ssss123',
+        phone: '123123ssss123',
         category_id: v4(),
     }
 ]
 
-class ContactsReposotory{
-    findAll(){
+class ContactsReposotory {
+    findAll() {
         return new Promise((resolve) => resolve(contacts));
     }
 
-    findById(id){
+    findById(id) {
         return new Promise((resolve) => resolve(
             contacts.find((contact) => contact.id === id),
         ));
     }
 
-    findByEmail(email){
+    findByEmail(email) {
         return new Promise((resolve) => resolve(
             contacts.find((contact) => contact.email === email),
         ));
     }
 
-    delete(id){
+    delete(id) {
         return new Promise((resolve) => {
             contacts = contacts.filter((contact) => contact.id !== id)
             resolve();
         });
     }
 
-    create({name, email, phone, category_id}){
+    create({ name, email, phone, category_id }) {
         return new Promise((resolve) => {
             const newContact = {
                 id: v4(),
@@ -51,6 +51,25 @@ class ContactsReposotory{
             contacts.push(newContact);
             resolve(newContact);
         });
+    }
+
+    update(id, { name, email, phone, category_id }) {
+
+        return new Promise((resolve) =>{
+            const updatedContact = {
+                id,
+                name,
+                email,
+                category_id
+            };
+    
+            contacts = contacts.map((contact) =>(
+                contact.id === id ? updatedContact : contact
+            ));
+
+            resolve(updatedContact);
+        })
+        
     }
 }
 
