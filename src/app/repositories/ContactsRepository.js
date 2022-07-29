@@ -3,12 +3,22 @@ const db = require('../../database');
 class ContactsReposotory {
     async findAll(orderBy = 'ASC') {
         const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-        const rows = await db.query(`SELECT * FROM contacts ORDER BY name ${direction}`);
+        const rows = await db.query(`
+            SELECT con.* ,
+                cate.name as category_name
+            FROM contacts con
+            LEFT JOIN categories cate on cate.id = con.category_id
+            ORDER BY name ${direction}`);
         return rows;
     }
 
     async findById(id) {
-        const [row] = await db.query('SELECT * FROM contacts WHERE id = $1', [id]);
+        const [row] = await db.query(`
+            SELECT con.* ,
+            cate.name as category_name
+            FROM contacts con
+            LEFT JOIN categories cate on cate.id = con.category_id
+            WHERE con.id = $1`, [id]);
         return row;
     }
 
